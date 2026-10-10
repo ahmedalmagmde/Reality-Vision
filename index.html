@@ -229,6 +229,17 @@ footer .socials a:hover svg{stroke:var(--gold)}
 html[dir=ltr] .order-box select{background-position:right 16px center;padding-left:16px;padding-right:46px}
 .order-box select::-ms-expand{display:none}
 .order-box label:first-of-type{margin-top:0}
+
+/* ===== Mobile menu ===== */
+@media(max-width:900px){
+ .nav-links{position:absolute;top:100%;right:0;left:0;margin:0;padding:4px 0 8px;gap:0;background:rgba(14,24,46,.97);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);box-shadow:0 24px 40px rgba(0,0,0,.45);transform:translateY(-12px);opacity:0;visibility:hidden;transition:transform .35s var(--ease),opacity .3s,visibility .3s;max-height:calc(100vh - 70px);overflow-y:auto}
+ .nav-links.open{transform:none;opacity:1;visibility:visible}
+ .nav-links li{border-bottom:1px solid rgba(214,178,106,.12)}
+ .nav-links li:last-child{border-bottom:0}
+ .nav-links a{display:block;padding:15px 24px;font-size:16px;color:var(--ivory)}
+ .nav-links a::after{display:none}
+ .nav-links a:hover,.nav-links a:active{background:rgba(214,178,106,.1);color:var(--gold2)}
+}
 </style>
 </head>
 <body>
@@ -436,6 +447,11 @@ if(location.hash)history.replaceState(null,'',location.pathname+location.search)
 scrollTo(0,0);addEventListener('load',function(){scrollTo(0,0)});addEventListener('pageshow',function(){scrollTo(0,0)});
 var d=document,hd=d.querySelector('header');
 function sc(){hd.classList.toggle('scrolled',scrollY>30)}
+var nl=d.getElementById('navLinks'),mb=d.querySelector('.menu-btn');
+if(nl&&mb){new MutationObserver(function(){var o=nl.classList.contains('open');mb.textContent=o?'✕':'☰';mb.setAttribute('aria-expanded',o)}).observe(nl,{attributes:true,attributeFilter:['class']});
+d.addEventListener('click',function(e){if(nl.classList.contains('open')&&!nl.contains(e.target)&&!mb.contains(e.target))nl.classList.remove('open')});
+addEventListener('scroll',function(){if(nl.classList.contains('open'))nl.classList.remove('open')},{passive:true})}
+
 addEventListener('scroll',sc,{passive:true});sc();
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target;t.classList.add('in');io.unobserve(t);setTimeout(function(){t.classList.remove('rv','in');t.style.transitionDelay=''},1600)})},{threshold:.12});
 d.querySelectorAll('.sec-title,.about-grid>*,.order-box,.card,.c-card').forEach(function(el){
